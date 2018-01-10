@@ -4,6 +4,10 @@
     "start": "micro"
   },
   "dependencies": {
-    "micro": "^9.1.0"
+    "micro": "^9.1.0",
+    "microrouter": "^3.0.0",
+    "request": "^2.83.0",
+    "unzip": "^0.1.11",
+    "xml2js": "^0.4.19"
   }
 }
