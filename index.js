@@ -37,9 +37,9 @@ const searchAliment = (req, res) => {
   const aliments = data.alimentTable.TABLE.ALIM.filter(aliment => {
     return keyWords.every(keyword => {
       return aliment.alim_nom_index_fr.some(indexFr => {
-        return indexFr.toLowerCase().includes(` ${keyword.toLowerCase()} `)
+        return indexFr.toLowerCase().includes(keyword.toLowerCase())
       }) || aliment.alim_nom_index_eng.some(indexEng => {
-        return indexEng.toLowerCase().includes(` ${keyword.toLowerCase()} `)
+        return indexEng.toLowerCase().includes(keyword.toLowerCase())
       })
     })
   })
