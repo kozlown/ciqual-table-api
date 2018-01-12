@@ -1,6 +1,7 @@
 const request = require('request')
 const unzip = require('unzip')
 const { parseString } = require('xml2js')
+var legacy = require('legacy-encoding')
 
 module.exports = new Promise((resolve, reject) => {
   let alimentTable = ''
@@ -10,8 +11,12 @@ module.exports = new Promise((resolve, reject) => {
 
   request('https://ciqual.anses.fr/cms/sites/default/files/inline-files/TableCiqual2017_XML_2017%2011%2021.zip')
     .pipe(unzip.Parse())
-    .on('entry', function (entry) {
+    .on('entry', entry => {
       const fileName = entry.path
+      if (!['alim_2017 11 21.xml', 'compo_2017 11 21.xml', 'const_2017 11 21.xml'].includes(fileName)) {
+        entry.on('data', () => {})
+        return
+      }
       entry.on('end', () => {
         nbFinishedFiles += 1
         let tableToParse = null
@@ -26,28 +31,37 @@ module.exports = new Promise((resolve, reject) => {
             tableToParse = constantTable
             break
         }
-        if (tableToParse !== null) {
-          parseString(tableToParse, (err, result) => {
-            if (err) {
-              reject (err)
-            }
-            tableToParse = result
-          })
-        }
-        if (nbFinishedFiles === 5) {
-          resolve({ alimentTable, compositionTable, constantTable })
-        }
+        parseString(tableToParse, (err, result) => {
+          if (err) {
+            reject (err)
+          }
+          switch (fileName) {
+            case 'alim_2017 11 21.xml':
+              alimentTable = result
+              break
+            case 'compo_2017 11 21.xml':
+              compositionTable = result
+              break
+            case 'const_2017 11 21.xml':
+              constantTable = result
+              break
+          }
+          if (nbFinishedFiles === 3) {
+            resolve({ alimentTable, compositionTable, constantTable })
+          }
+        })
       })
+      const decode = value => legacy.decode(value, 'windows-1252')
       entry.on('data', chunk => {
         switch (fileName) {
           case 'alim_2017 11 21.xml':
-            alimentTable += chunk.toString()
+            alimentTable += decode(chunk)
             break
           case 'compo_2017 11 21.xml':
-            compositionTable += chunk.toString()
+            compositionTable += decode(chunk)
             break
           case 'const_2017 11 21.xml':
-            constantTable += chunk.toString()
+            constantTable += decode(chunk)
             break
         }
       })

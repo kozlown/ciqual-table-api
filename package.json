@@ -4,8 +4,11 @@
     "start": "micro"
   },
   "dependencies": {
+    "deep-keys": "^0.5.0",
+    "legacy-encoding": "^3.0.0",
     "micro": "^9.1.0",
     "microrouter": "^3.0.0",
+    "obj-parse": "^0.3.0",
     "request": "^2.83.0",
     "unzip": "^0.1.11",
     "xml2js": "^0.4.19"
