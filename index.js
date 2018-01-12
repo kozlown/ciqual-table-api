@@ -34,14 +34,12 @@ const alimentNutrients = (req, res) => {
 }
 
 const searchAliment = (req, res) => {
-  const keyWords = req.query.keywords.split('+')
-  const aliments = data.alimentTable.TABLE.ALIM.filter(aliment => {
+  const keyWords = req.query.keywords.split(' ')
+
+  const aliments = removeArrays(data.alimentTable.TABLE.ALIM).filter(aliment => {
     return keyWords.every(keyword => {
-      return aliment.alim_nom_index_fr.some(indexFr => {
-        return indexFr.toLowerCase().includes(keyword.toLowerCase())
-      }) || aliment.alim_nom_index_eng.some(indexEng => {
-        return indexEng.toLowerCase().includes(keyword.toLowerCase())
-      })
+      return aliment.alim_nom_fr.toLowerCase().includes(keyword.toLowerCase())
+      || aliment.alim_nom_eng.toLowerCase().includes(keyword.toLowerCase())
     })
   })
   send(res, 200, aliments.map(removeArrays))
