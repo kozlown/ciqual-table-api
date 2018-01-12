@@ -15,20 +15,21 @@ getData.then((d) => {
   console.info('Ready')
 })
 
+const removeArrays = elem => {
+  deepKeys(elem).forEach(key => {
+    const get = parse(key)
+    const set = parse(key).assign
+    if (Array.isArray(get(elem))) {
+      set(elem, get(elem)[0])
+    }
+  })
+  return elem
+}
+
 const alimentNutrients = (req, res) => {
   const composition = data.compositionTable.TABLE.COMPO.filter(
     element => parseInt(element.alim_code[0]) === parseInt(req.params.alimcode)
   )
-  const removeArrays = elem => {
-    deepKeys(elem).forEach(key => {
-      const get = parse(key)
-      const set = parse(key).assign
-      if (Array.isArray(get(elem))) {
-        set(elem, get(elem)[0])
-      }
-    })
-    return elem
-  }
   send(res, 200, composition.map(removeArrays))
 }
 
@@ -43,7 +44,7 @@ const searchAliment = (req, res) => {
       })
     })
   })
-  send(res, 200, aliments)
+  send(res, 200, aliments.map(removeArrays))
 }
 
 module.exports = router(
