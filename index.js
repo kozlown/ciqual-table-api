@@ -15,18 +15,6 @@ getData.then((d) => {
   console.info('Ready')
 })
 
-const aliment = (req, res) => {
-  send(res, 200, data.alimentTable.toString())
-}
-
-const composition = (req, res) => {
-  send(res, 200, data.compositionTable.toString())
-}
-
-const constant = (req, res) => {
-  send(res, 200, data.constantTable.toString())
-}
-
 const alimentNutrients = (req, res) => {
   const composition = data.compositionTable.TABLE.COMPO.filter(
     element => parseInt(element.alim_code[0]) === parseInt(req.params.alimcode)
@@ -59,9 +47,6 @@ const searchAliment = (req, res) => {
 }
 
 module.exports = router(
-  get('/aliment', aliment),
-  get('/composition', composition),
-  get('/constant', constant),
   get('/:alimcode/nutrients', alimentNutrients),
   get('/search', searchAliment)
 )
