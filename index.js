@@ -3,7 +3,6 @@ const { send } = require('micro')
 const parse = require('obj-parse')
 const deepKeys = require('deep-keys')
 
-
 const getData = require('./data')
 
 let data = null
@@ -45,7 +44,17 @@ const searchAliment = (req, res) => {
   send(res, 200, aliments.map(removeArrays))
 }
 
-module.exports = router(
+const cors = ( middleware ) => {
+  return (req, res, next) => {
+    res.setHeader(
+      'Access-Control-Allow-Origin',
+      '*'
+    )
+    middleware(req, res, next)
+  }
+}
+
+module.exports = cors(router(
   get('/:alimcode/nutrients', alimentNutrients),
   get('/search', searchAliment)
-)
+))
