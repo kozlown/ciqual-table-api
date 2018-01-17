@@ -1,7 +1,7 @@
 {
   "main": "index.js",
   "scripts": {
-    "start": "micro -p 3001"
+    "start": "node index.js"
   },
   "dependencies": {
     "deep-keys": "^0.5.0",
