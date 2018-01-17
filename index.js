@@ -2,19 +2,25 @@ const { router, get } = require('microrouter')
 const { send } = require('micro')
 const parse = require('obj-parse')
 const deepKeys = require('deep-keys')
+const micro = require('micro')
 
 const getData = require('./data')
 
 let data = null
 
-console.info('Downloading data... please wait "Ready" message')
+console.info('Downloading data...')
 
 getData.then((d) => {
   data = d
-  console.info('Ready')
+  console.info('Server listening on port 3001')
 })
 
 const removeArrays = elem => {
+  if (Array.isArray(elem)) {
+    elem = [ ...elem ]
+  } else {
+    elem = { ...elem }
+  }
   deepKeys(elem).forEach(key => {
     const get = parse(key)
     const set = parse(key).assign
@@ -54,7 +60,9 @@ const cors = ( middleware ) => {
   }
 }
 
-module.exports = cors(router(
+const server = micro(cors(router(
   get('/:alimcode/nutrients', alimentNutrients),
   get('/search', searchAliment)
-))
+)))
+
+server.listen(3001)
