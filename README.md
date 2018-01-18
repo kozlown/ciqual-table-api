@@ -3,7 +3,7 @@ REST API for the [Ciqual French Food Composition Table](https://ciqual.anses.fr/
 
 Data source: [ANSES-CIQUAL French food composition table version 2017](https://ciqual.anses.fr/cms/sites/default/files/inline-files/TableCiqual2017_XML_2017%2011%2021.zip).
 
-Currently deployed with [Now](https://zeit.co/now) right [there](https://ciqual-table-api-kqeusmdrms.now.sh).
+Currently deployed right [there](http://109.238.11.174:3001/search?keywords=chocolate).
 
 # routes
 
